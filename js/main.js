@@ -6,13 +6,27 @@ let isActive = false
 
 const start = document.getElementById('start')
 const gameContainer = document.getElementById('gameContainer')
+const hardLevel = document.getElementById('hardLevel')
 
 start.addEventListener('click', startGame)
+
+document.getElementById('hardLevel').addEventListener('click', () => {
+    difficulty = difficulty === "normal" ? "hard" : "normal"
+    document.getElementById('hardLevel').textContent = difficulty === "hard" ? "Легше 🙂" : "Складніше 💪"
+})
+
+hardLevel.addEventListener('click', () => {
+    difficulty = 'hard'
+    hardLevel.textContent = 'Режим: Hard 🔥'
+})
+
 
 function startGame() {
     isActive = true
     score = 0 
     timer = 15
+    timer = difficulty === 'hard' ? 10 : 15 
+    hardLevel.style.display = 'none'
     start.style.display = 'none'
     createCircle()
     interval = setInterval(() => {
@@ -30,29 +44,6 @@ function startGame() {
     }, 1000)
 }
 
-function hardLevel() {
-    isActive = true
-    score = 0
-    timer = 5
-    hardLevelButton.style.display = 'none'
-    start.style.display = 'none'
-    createCircleHardLevel()
-    interval = setInterval(() => {
-        if (timer > 0) {
-            timer--   
-            document.getElementById('timer').textContent = `Таймер: ${timer}`
-        } else{
-            clearInterval(interval)
-            clearTimeout(timeout)
-            isActive = false
-            gameContainer.lastElementChild.remove()
-            document.body.innerHTML = `<h1>Гра завершена! Ваш рахунок: ${score}</h1>`
-            start.style.display = 'inline'
-            hardLevelButton.style.display = 'inline'
-        }
-    }, 1000)
-}
-
 function createCircle() {
     const circle = document.createElement('div')
     circle.className = 'circle'
@@ -62,7 +53,7 @@ function createCircle() {
     timeOut = setTimeout(() => {
         circle.remove()
         createCircle()
-    }, 1000)
+    }, difficulty === "hard" ? 700 : 1000)
 
     circle.addEventListener('click', () =>{
         if(isActive){
