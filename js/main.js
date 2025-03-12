@@ -86,7 +86,6 @@ function createCircle() {
     circle.className = 'circle'
     circle.style.top = `${Math.floor(Math.random() * (gameContainer.clientHeight - 70))}px`
     circle.style.left = `${Math.floor(Math.random() * (gameContainer.clientWidth - 70))}px`
-    circle.style.background = `rgb(${Math.random() * 250}, ${Math.random() * 250}, ${Math.random() * 250})`
     timeOut = setTimeout(() => {
         circle.remove()
         createCircle()
