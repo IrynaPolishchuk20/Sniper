@@ -7,6 +7,7 @@ body{
     background-color: #222;
     color: #fff;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    overflow: hidden;
 }
    
 #gameContainer{
@@ -59,4 +60,16 @@ p{
     height: 70px;
     background-color: coral;
     border-radius: 50%;
+}
+
+#timer {
+    font-size: 2rem;
+    animation: timerAnimation 1s infinite alternate;
+}
+
+
+@keyframes timerAnimation {
+    0% { color: #ffcc00; }
+    50% { color: #ff6600; }
+    100% { color: #ff0000; }
 }

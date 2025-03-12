@@ -3,17 +3,25 @@ let score = 0
 let timeOut
 let interval 
 let isActive = false
+let difficulty = "normal"
 
 const start = document.getElementById('start')
 const gameContainer = document.getElementById('gameContainer')
 const hardLevel = document.getElementById('hardLevel')
+const bestScoreElement = document.getElementById('bestScore')
+const historyElement = document.getElementById('history')
+
 
 start.addEventListener('click', startGame)
 
+let history = JSON.parse(localStorage.getItem("gameHistory")) || []
+let bestScore = localStorage.getItem("bestScore") || 0
+bestScoreElement.textContent = `Найкращий рахунок 🏆: ${bestScore}`
+updateHistoryDisplay()
+
 document.getElementById('hardLevel').addEventListener('click', () => {
-    difficulty = difficulty === "normal" ? "hard" : "normal"
-    document.getElementById('hardLevel').textContent = difficulty === "hard" ? "Легше 🙂" : "Складніше 💪"
-})
+    difficulty = difficulty === "normal" ? "hard" : "normal";
+});
 
 hardLevel.addEventListener('click', () => {
     difficulty = 'hard'
@@ -38,10 +46,39 @@ function startGame() {
             clearTimeout(timeOut)
             isActive = false
             gameContainer.lastElementChild.remove()
-            document.body.innerHTML = `<h1>Гра завершена! Ваш рахунок: ${score}</h1>`
             start.style.display = 'inline'
+            endGame();
         }
     }, 1000)
+}
+
+function endGame() {
+    clearInterval(interval)
+    clearTimeout(timeOut)
+    isActive = false
+    gameContainer.lastElementChild.remove()
+    
+    history.unshift(score)
+    history = history.slice(0, 5) 
+    localStorage.setItem("gameHistory", JSON.stringify(history))
+
+    if (score > bestScore) {
+        bestScore = score
+        localStorage.setItem("bestScore", bestScore)
+        bestScoreElement.textContent = `Найкращий результат 🏆: ${bestScore}`
+    }
+
+    updateHistoryDisplay()
+    document.body.innerHTML = `<h1>Гра завершена! <br> Ваш результат: ${score}</h1>`
+    start.style.display = 'inline'
+}
+
+function updateHistoryDisplay() {
+    history = Array.isArray(history) ? history.filter(item => typeof item === "number") : []
+
+    historyElement.textContent = history.length > 0 
+        ? `Історія: ${history.join(", ")}` 
+        : "Історія: поки немає результатів"
 }
 
 function createCircle() {
